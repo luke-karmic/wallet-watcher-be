@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+yarn.lock
+.vscode/
+src/.DS_STORE
+.env
+dist/
+.cache/
+yarn-error.log
+data/
