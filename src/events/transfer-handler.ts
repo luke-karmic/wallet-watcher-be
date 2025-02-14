@@ -42,23 +42,22 @@ export const transferHandler = async (transferEvent: MappedTransferEvent) => {
       ),
       ethValue: transferEvent.ethValue,
       dollarValue: transferEvent.dollarValue,
-    };
+    }
     const priceImpact = transferEvent.priceImpact
       ? new Decimal(transferEvent.priceImpact)
-      : new Decimal(0);
+      : new Decimal(0)
     if (
       transferInfo.ethValue.greaterThan(thresholds.ethAlertThreshold) ||
       priceImpact.greaterThan(thresholds.priceImpactThreshold)
     ) {
-      const formattedEthValue = transferInfo.ethValue.toFixed(3) + " ETH";
+      const formattedEthValue = transferInfo.ethValue.toFixed(3) + " ETH"
       const dollarValue = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(transferInfo.dollarValue.toNumber());
-      const priceImpactColour = getPriceImpactcolour(priceImpact);
-      const formattedPriceImpact = priceImpact.toFixed(3) + "%";
+      }).format(transferInfo.dollarValue.toNumber())
+      const formattedPriceImpact = priceImpact.toFixed(3) + "%"
       const formattedTotalSupply =
-        transferInfo.transferSupplyPercentage.toFixed(3) + "%";
+        transferInfo.transferSupplyPercentage.toFixed(3) + "%"
 
       const notification: Notification = {
         title: "Whale Alert",
@@ -83,7 +82,7 @@ export const transferHandler = async (transferEvent: MappedTransferEvent) => {
             },
           },
         ],
-      };
+      }
 
       await sendAlert({
         mode: TelegramDeliveryMode.Image,
@@ -96,19 +95,19 @@ export const transferHandler = async (transferEvent: MappedTransferEvent) => {
           priceImpact: formattedPriceImpact,
           ethValue: formattedEthValue,
         },
-      });
+      })
     }
   } catch (err) {
-    console.error("Error: Transfer Handler failed", err);
+    console.error("Error: Transfer Handler failed", err)
   }
-};
+}
 
 const getPriceImpactcolour = (priceImpact: Decimal) => {
   if (priceImpact.greaterThan(0) && priceImpact.lessThan(0.5)) {
-    return PriceImpactColour.Green;
+    return PriceImpactColour.Green
   } else if (priceImpact.greaterThan(0.5) && priceImpact.lessThan(1)) {
-    return PriceImpactColour.Yellow;
+    return PriceImpactColour.Yellow
   } else {
-    return PriceImpactColour.Red;
+    return PriceImpactColour.Red
   }
-};
+}
